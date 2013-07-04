@@ -19,22 +19,15 @@
 
 #include "Arduino.h"
 
-class AutoHomeComm
+class AHComm
 {
   public:
-  	void begin(uint8_t *, uint8_t);
-  	void sendData();
-  	void receiveData();
-  private:
-  	uint8_t * address; // address of the struct
-  	uint8_t size; // size of the struct
-  	uint8_t * rx_buffer; // address for temporary storage and parsing buffer
-  	uint8_t rx_array_inx; // index for RX parsing buffer
-  	uint8_t rx_len // RX packet length according to the packer
-  	uint8_t calc_CS; // calculated checksum
-  	enum Commands {
-  		STATUS_REPORT
-  	}
+    bool packetAvailable();
+    int getPacketSize();
+    void receive(uint8_t byte);
+    void transmit(uint8_t array[]);
+    uint8_t * readPacket(uint8_t packet[]);
+
 };
 
 #endif
