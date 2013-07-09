@@ -14,8 +14,9 @@
 #ifndef AHComm_h
 #define AHComm_h
 
-
-#define details(name) (byte*)&name,sizeof(name)
+#define BUFFER_SIZE 255
+#define START_BYTE_HIGH 254
+#define START_BYTE_LOW 254
 
 #include "Arduino.h"
 
@@ -30,10 +31,11 @@ class AHComm
 
   private:
     // Declare variables
-	char buffer[255]; // Buffer for storing packets
-	int buffer_write_index = 0; // Location of current write to buffer
-	int buffer_read_index = 0; // Location of first read to buffer
-
+	uint8_t buffer[BUFFER_SIZE]; // Buffer for storing packets
+	int buffer_write_index; // Location of current write to buffer
+	int buffer_read_index; // Location of first read to buffer
+	// Declare Function
+	bool checkPacket(startByte);
 };
 
 #endif
