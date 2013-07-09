@@ -11,8 +11,8 @@
  * available in the GNU Public License.
  */
 
-#ifndef AutoHomeComm_h
-#define AutoHomeComm_h
+#ifndef AHComm_h
+#define AHComm_h
 
 
 #define details(name) (byte*)&name,sizeof(name)
@@ -27,6 +27,12 @@ class AHComm
     void receive(uint8_t byte);
     void transmit(uint8_t array[]);
     uint8_t * readPacket(uint8_t packet[]);
+
+  private:
+    // Declare variables
+	char buffer[255]; // Buffer for storing packets
+	int buffer_write_index = 0; // Location of current write to buffer
+	int buffer_read_index = 0; // Location of first read to buffer
 
 };
 

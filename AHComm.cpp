@@ -9,5 +9,30 @@
  */
 
 
-#include <AutoHomeComm.h>
+#include <AHComm.h>
+
+AHComm::AHComm()
+{
+
+
+
+}
+
+// Saves a byte of data into the circullar buffer
+bool AHComm::receive(data)
+{
+	// Save data into buffer
+	buffer[buffer_write_index] = data;
+
+	// Increment write pointer
+	buffer_write_index++;
+
+	// If write pointer is out of range start from beginning
+	if (buffer_write_index == 255)
+	{
+		buffer_write_index = 0;
+	}
+
+	return true
+}
 
