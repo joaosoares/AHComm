@@ -17,21 +17,22 @@
 #define BUFFER_SIZE 255
 #define START_BYTE_HIGH 254
 #define START_BYTE_LOW 254
-#define SIZE_HEADER 9
-#define SIZE_ID 4
-#define SIZE_CHECKSUM 2
+#define HEADER_SIZE 9
+#define ID_SIZE 4
+#define CHECKSUM_SIZE 2
 
 #include "Arduino.h"
 
 class AHComm
 {
   public:
+    AHComm(uint16_t);
   	unsigned int module_type; // Used for checking ID
     bool packetAvailable();
-    int getPacketSize();
-    void receive(uint8_t byte);
+    int packetSize();
+    bool receive(uint8_t byte);
     void transmit(uint8_t array[]);
-    void readPacket(uint8_t packet[]);
+    void readPacket(uint8_t packet[], uint16_t length);
 
   private:
     // Declare variables
@@ -39,7 +40,7 @@ class AHComm
 	int buffer_write_index; // Location of current write to buffer
 	int buffer_read_index; // Location of first read to buffer
 	// Declare Function
-	bool checkPacket(startByte);
+	bool checkPacket(uint16_t start_byte);
 };
 
 #endif

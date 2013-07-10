@@ -11,7 +11,7 @@
 
 #include <AHComm.h>
 
-AHComm::AHComm(unsigned int temp)
+AHComm::AHComm(uint16_t temp)
 {
 	// Keeps track of read and write location in incoming buffer
 	buffer_write_index = 0;
@@ -35,17 +35,18 @@ bool AHComm::receive(uint8_t data)
 		buffer_write_index = 0;
 	}
 
-	return true
+	return true;
 }
 
 // Returns true if a complete packet is found in buffer
-int AHComm::packetAvailable()
+bool AHComm::packetAvailable()
 {
 	// Declare variables
-	packet_found = false; // Used to stop while loop when complete
+	bool packet_found = false; // Used to stop while loop when complete
 
 	// Iterate through buffer searching for packet
-	while (!packet_found && ite<BUFFER_SIZE)
+	int i = 0;
+	while (!packet_found && i<BUFFER_SIZE)
 	{
 		// Check if first two bytes in buffer are starting int
 		if (buffer[buffer_read_index] == START_BYTE_HIGH)
@@ -62,9 +63,9 @@ int AHComm::packetAvailable()
 		{
 			buffer_read_index++;
 		}
+		i++;
 	}
-
-	return packet_found
+	return packet_found;
 }
 
 // Length of first packet in buffer
@@ -76,27 +77,27 @@ int AHComm::packetSize()
 	int length = buffer[buffer_read_index+6] << 8;
 	length += buffer[buffer_read_index+7];
 
-	return length
+	return length;
 }
 
 // Returns a body of packet and update read pointer
-void AHComm::readPacket(packet[], length)
+void AHComm::readPacket(uint8_t packet[], uint16_t length)
 {
 	// Assume packet has been previously checked with PacketAvailable
 	// and passed.
 	// Return full packet and increment buffer_read_index to end of packet
-	for (i=HEADER_SIZE;i<length+HEADER_SIZE;i++)
+	for (uint16_t i=0; i<length; i++)
 	{
-		// Read packet and rap around if reaching end of buffer
-		packet = buffer[((i+buffer_read_index) % (BUFFER_SIZE-1))]	
+		// Read packet and wrap around if reaching end of buffer
+		packet[i] = buffer[( (i+HEADER_SIZE+buffer_read_index) % (BUFFER_SIZE-1) )];
 	}
 
 	// Update read pointer
-	buffer_read_index = ((buffer_read_index + length) % (BUFFER_SIZE-1)) 
+	buffer_read_index = ((HEADER_SIZE+buffer_read_index + length) % (BUFFER_SIZE-1));
 }
 
 // Checks packet at start address passed for consistency and completion
-bool checkPacket(start_byte)
+bool AHComm::checkPacket(uint16_t start_byte)
 {
 	// Start by checking for start bytes 
 	if (buffer[start_byte] == START_BYTE_HIGH)
@@ -105,27 +106,32 @@ bool checkPacket(start_byte)
 		{
 			// Read 4 ID Bytes and check if correspond to LED Module
 			unsigned long id = 0;
-			for (i=0;i<SIZE_ID;i++)
+			for (int i=0;i<ID_SIZE;i++)
 			{
-				id |= buffer[start_byte+2+i] << 8*(SIZE_ID-1+i);
+				id |= buffer[start_byte+2+i] << 8*(ID_SIZE-1+i);
 			}
-			if (((id & ~(0xFC) >> 8*(SIZE_ID-2))) == module_type) 
+			if (((id & ~(0xFC) >> 8*(ID_SIZE-2))) == module_type) 
 			{
 				// Read checksum and check against actual
 				unsigned int checksum = 0;
-				for (i=0;9<CHECKSUM_SIZE;i++)
+				for (int i=0;9<CHECKSUM_SIZE;i++)
 				{
-					checksum |= buffer[start_byte+2+SIZE_ID] << 8*(SIZE_CHECKSUM-1+i);
+					checksum |= buffer[start_byte+2+ID_SIZE] << 8*(CHECKSUM_SIZE-1+i);
 				}
 				// ADD CHECK FOR CHECKSUM AND CONTNUE FUNCION
 				
 				// If all checks have passed 
-				return true
+				return true;
 			}
 		}
 	}
 
 	// If any of the checks failed return false
-	return false
+	return false;
+}
+
+void AHComm::transmit(uint8_t array[])
+{
+	
 }
 
