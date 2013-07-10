@@ -13,6 +13,7 @@
 
 AHComm::AHComm()
 {
+	// Keeps track of read and write location in incoming buffer
 	buffer_write_index = 0;
 	buffer_read_index = 0;
 }
@@ -76,13 +77,13 @@ int AHComm::packetSize()
 	return length
 }
 
-// Returns a full packet and update read pointer
+// Returns a body of packet and update read pointer
 void AHComm::readPacket(packet[], length)
 {
 	// Assume packet has been previously checked with PacketAvailable
 	// and passed.
 	// Return full packet and increment buffer_read_index to end of packet
-	for (i=0;i<length;i++)
+	for (i=HEADER_SIZE;i<length+HEADER_SIZE;i++)
 	{
 		// Read packet and rap around if reaching end of buffer
 		packet = buffer[((i+buffer_read_index) % (BUFFER_SIZE-1))]	

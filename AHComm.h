@@ -17,6 +17,7 @@
 #define BUFFER_SIZE 255
 #define START_BYTE_HIGH 254
 #define START_BYTE_LOW 254
+#define HEADER_SIZE 9
 
 #include "Arduino.h"
 
