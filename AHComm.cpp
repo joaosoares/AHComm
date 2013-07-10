@@ -117,9 +117,15 @@ bool checkPacket(start_byte)
 				{
 					checksum |= buffer[start_byte+2+SIZE_ID] << 8*(SIZE_CHECKSUM-1+i);
 				}
-				if // ADD CHECK FOR CHECKSUM AND CONTNUE FUNCION
+				// ADD CHECK FOR CHECKSUM AND CONTNUE FUNCION
+				
+				// If all checks have passed 
+				return true
 			}
 		}
 	}
+
+	// If any of the checks failed return false
+	return false
 }
 
