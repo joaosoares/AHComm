@@ -17,13 +17,16 @@
 #define BUFFER_SIZE 255
 #define START_BYTE_HIGH 254
 #define START_BYTE_LOW 254
-#define HEADER_SIZE 9
+#define SIZE_HEADER 9
+#define SIZE_ID 4
+#define SIZE_CHECKSUM 2
 
 #include "Arduino.h"
 
 class AHComm
 {
   public:
+  	unsigned int module_type; // Used for checking ID
     bool packetAvailable();
     int getPacketSize();
     void receive(uint8_t byte);

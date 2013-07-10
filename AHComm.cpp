@@ -11,11 +11,13 @@
 
 #include <AHComm.h>
 
-AHComm::AHComm()
+AHComm::AHComm(unsigned int temp)
 {
 	// Keeps track of read and write location in incoming buffer
 	buffer_write_index = 0;
 	buffer_read_index = 0;
+	module_type = temp;
+
 }
 
 // Saves a byte of data into the circullar buffer
@@ -107,7 +109,7 @@ bool checkPacket(start_byte)
 			{
 				id |= buffer[start_byte+2+i] << 8*(SIZE_ID-1+i);
 			}
-			if (id) // ADD CHECK FOR LED MODULE LATTER
+			if (((id & ~(0xFC) >> 8*(SIZE_ID-2))) == module_type) 
 			{
 				// Read checksum and check against actual
 				unsigned int checksum = 0;
