@@ -18,7 +18,7 @@ AHComm::AHComm()
 }
 
 // Saves a byte of data into the circullar buffer
-bool AHComm::receive(data)
+bool AHComm::receive(uint8_t data)
 {
 	// Save data into buffer
 	buffer[buffer_write_index] = data;
@@ -62,5 +62,33 @@ int AHComm::packetAvailable()
 	}
 
 	return packet_found
+}
+
+// Length of first packet in buffer
+int AHComm::packetSize()
+{
+	// Assume packet has been previously checked with PacketAvailable
+	// and passed.
+	// Read length of packet at 7th address after start of packet
+	int length = buffer[buffer_read_index+6] << 8;
+	length += buffer[buffer_read_index+7];
+
+	return length
+}
+
+// Returns a full packet and update read pointer
+void AHComm::readPacket(packet[], length)
+{
+	// Assume packet has been previously checked with PacketAvailable
+	// and passed.
+	// Return full packet and increment buffer_read_index to end of packet
+	for (i=0;i<length;i++)
+	{
+		// Read packet and rap around if reaching end of buffer
+		packet = buffer[((i+buffer_read_index) % (BUFFER_SIZE-1))]	
+	}
+
+	// Update read pointer
+	buffer_read_index = ((buffer_read_index + length) % (BUFFER_SIZE-1)) 
 }
 

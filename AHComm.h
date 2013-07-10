@@ -27,7 +27,7 @@ class AHComm
     int getPacketSize();
     void receive(uint8_t byte);
     void transmit(uint8_t array[]);
-    uint8_t * readPacket(uint8_t packet[]);
+    void readPacket(uint8_t packet[]);
 
   private:
     // Declare variables
