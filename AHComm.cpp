@@ -93,3 +93,31 @@ void AHComm::readPacket(packet[], length)
 	buffer_read_index = ((buffer_read_index + length) % (BUFFER_SIZE-1)) 
 }
 
+// Checks packet at start address passed for consistency and completion
+bool checkPacket(start_byte)
+{
+	// Start by checking for start bytes 
+	if (buffer[start_byte] == START_BYTE_HIGH)
+	{
+		if (buffer[start_byte+1] == START_BYTE_LOW)
+		{
+			// Read 4 ID Bytes and check if correspond to LED Module
+			unsigned long id = 0;
+			for (i=0;i<SIZE_ID;i++)
+			{
+				id |= buffer[start_byte+2+i] << 8*(SIZE_ID-1+i);
+			}
+			if (id) // ADD CHECK FOR LED MODULE LATTER
+			{
+				// Read checksum and check against actual
+				unsigned int checksum = 0;
+				for (i=0;9<CHECKSUM_SIZE;i++)
+				{
+					checksum |= buffer[start_byte+2+SIZE_ID] << 8*(SIZE_CHECKSUM-1+i);
+				}
+				if // ADD CHECK FOR CHECKSUM AND CONTNUE FUNCION
+			}
+		}
+	}
+}
+
